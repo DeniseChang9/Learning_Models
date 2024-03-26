@@ -1,37 +1,40 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Models whether we guessed right, based on our confidence
+# Author: Denise Chang
+# Date: 26 March 2024
+# Contact: dede.chang@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
-
+# Pre-requisites: 02_download_data.R
 
 #### Workspace setup ####
 library(tidyverse)
+library(arrow)
 library(rstanarm)
 
 #### Read data ####
-analysis_data <- read_csv("outputs/data/analysis_data.csv")
+analysis_data <- read_parquet("outputs/data/analysis_data.parquet")
+
+analysis_data |>
+  ggplot(aes(x = certainty, y = outcome)) +
+  geom_jitter(height = 0)
+
 
 ### Model data ####
 first_model <-
   stan_glm(
-    formula = flying_time ~ length + width,
+    formula = outcome ~ certainty,
     data = analysis_data,
-    family = gaussian(),
+    family = binomial(link = "logit"),
     prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_aux = exponential(rate = 1, autoscale = TRUE),
     seed = 853
   )
 
+summary(first_model)
 
 #### Save model ####
 saveRDS(
   first_model,
   file = "outputs/models/first_model.rds"
 )
-
-
