@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Simulates an analysis dataset about Pokemon level and weakness against fire
+# Purpose: Simulates an analysis dataset about Pokemon level and weakness against water
 # Author: Denise Chang
 # Date: 26 March 2024
 # Contact: dede.chang@mail.utoronto.ca
@@ -8,15 +8,14 @@
 
 #### Workspace setup ####
 library(tidyverse)
-# [...UPDATE THIS...]
 
 #### Simulate data ####
 # EXAMPLE 
 data <-
   tibble(
-    level = rnorm(n = 1000, mean = 100, sd = 10) |>
+    level = rnorm(n = 500, mean = 50, sd = 4) |>
     floor(),
-    weakness = sample(x = c('fire', 'not fire'), size = 1000, replace = TRUE)
+    weakness = sample(x = c('water', 'not water'), size = 500, replace = TRUE)
   )
 
 
