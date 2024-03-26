@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Simulates the data on pokemon (to be updated)
+# Purpose: Simulates an analysis dataset about Pokemon level and weakness against fire
 # Author: Denise Chang
 # Date: 26 March 2024
 # Contact: dede.chang@mail.utoronto.ca
