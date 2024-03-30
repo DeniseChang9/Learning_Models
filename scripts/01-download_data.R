@@ -10,12 +10,13 @@
 library(opendatatoronto)
 library(tidyverse)
 library(httr)
-library(xml2)
+library(jsonlite)
 
 #### Download data ####
-genshin_char <- GET("https://genshinlist.com/api/characters")
-genshin_weapons <- GET("https://genshinlist.com/api/weapons")
-genshin_artifacts <- GET("https://genshinlist.com/api/artifacts")
+
+
+#### Read data ####
+player_ranking <- fromJSON("inputs/data/response_1711827000685.json")
 
 #### Save data ####
 # [...UPDATE THIS...]
