@@ -14,14 +14,42 @@ library(arrow)
 #### Clean data for 2001 census ####
 census_2001 <- read_parquet("inputs/data/raw_data/2001_census.parquet")
 
-# Remove demographic information
-clean_names(census_2001)
-
 census_2001 <-
-  census_2001 |>
-  slice(3:4)
+  clean_names(census_2001) |>
+  slice(1) |>
+  select(total_knowledge_of_official_languages, 
+         english_only, french_only, 
+         english_and_french, 
+         neither_english_nor_french)
 
-head(census_2001)
+
+#### Clean data for 2006 census ####
+census_2006 <- read_parquet("inputs/data/raw_data/2006_census.parquet")
+
+census_2006 <-
+  clean_names(census_2006) |>
+  select(knowledge_of_official_languages_5, 
+         total_number_of_non_official_languages_known)
+
+# pivot the tibble to match the other censuses
+census_2006$knowledge_of_official_languages_5 <- 1:5
+ 
+census_2006 <- pivot_wider(census_2006,
+                           names_from = knowledge_of_official_languages_5,
+                           values_from = total_number_of_non_official_languages_known)
+colnames(census_2006) <- c("total_knowledge_of_official_languages", 
+                           "english_only", "french_only", 
+                           "english_and_french", 
+                           "neither_english_nor_french")
+
+#### Clean data for 2011 census ####
+
+
+#### Clean data for 2016 census ####
+
+
+#### Clean data for 2021 census ####
+
 
 #### Save data ####
 # write_parquet(cleaned_data, "outputs/data/analysis_data.parquet")
