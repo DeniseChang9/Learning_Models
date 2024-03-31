@@ -8,6 +8,5 @@
 
 #### Installs packages ####
 install.packages("tidyverse")
-install.packages("httr")
-install.packages("jsonlite")
 install.packages("arrow")
+install.packages("janitor")
