@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Models whether we guessed right, based on our confidence
 # Author: Denise Chang
-# Date: 26 March 2024
+# Date: 31 March 2024
 # Contact: dede.chang@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 02_download_data.R
@@ -12,7 +12,7 @@ library(arrow)
 library(rstanarm)
 
 #### Read data ####
-analysis_data <- read_parquet("outputs/data/analysis_data.parquet")
+analysis_data <- read_parquet("outputs/data/clean_census_data.parquet")
 
 analysis_data |>
   ggplot(aes(x = certainty, y = outcome)) +
