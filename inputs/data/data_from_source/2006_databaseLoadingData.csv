@@ -1,13 +1,6 @@
-"Knowledge of Official Languages (5), Number of Non-official Languages Known (5), Age Groups (17A) and Sex (3) for the Population of Canada, Provinces, Territories, Census Metropolitan Areas and Census Agglomerations, 2006 Census - 20% Sample Data"
-"Geography = Canada [1]"
-"Sex (3) = Total - Sex"
-"Age groups (17A) = Total - Age groups"
 "Knowledge of official languages (5)","Total - Number of non-official languages known","  No non-official language","  One non-official language","  Two non-official languages","  Three or more non-official languages", 
 "Total - Knowledge of official languages",31241030,23732740,6485390,983285,39615 
 "  English only",21129945,15697475,4691580,712150,28745 
 "  French only",4141850,3851775,271340,18350,385 
 "  English and French",5448850,4183495,1056305,199680,9370 
 "  Neither English nor French",520385,0,466165,53100,1115 
-"Note"
-"[1] Excludes census data for one or more incompletely enumerated Indian reserves or Indian settlements."
-"Source: Statistics Canada - 2006 Census. Catalogue Number 97-555-XCB2006009."
