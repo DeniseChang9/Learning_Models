@@ -37,18 +37,22 @@ census_2006$knowledge_of_official_languages_5 <- 1:5
 census_2006 <- pivot_wider(census_2006,
                            names_from = knowledge_of_official_languages_5,
                            values_from = total_number_of_non_official_languages_known)
+
 colnames(census_2006) <- c("total_knowledge_of_official_languages", 
                            "english_only", "french_only", 
                            "english_and_french", 
                            "neither_english_nor_french")
 
 #### Clean data for 2011 census ####
+census_2011 <- read_parquet("inputs/data/raw_data/2011_census.parquet")
 
 
 #### Clean data for 2016 census ####
+census_2016 <- read_parquet("inputs/data/raw_data/2016_census.parquet")
 
 
 #### Clean data for 2021 census ####
+census_2021 <- read_parquet("inputs/data/raw_data/2021_census.parquet")
 
 
 #### Save data ####
