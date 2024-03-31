@@ -16,7 +16,7 @@ library(jsonlite)
 
 
 #### Read data ####
-player_ranking <- fromJSON("inputs/data/response_1711827000685.json")
+2011_census <- read_csv()
 
 #### Save data ####
 # [...UPDATE THIS...]
