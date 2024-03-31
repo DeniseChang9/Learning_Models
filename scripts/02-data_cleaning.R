@@ -4,9 +4,7 @@
 # Date: 30 March 2024
 # Contact: dede.chang@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: 
-#     - 00-install_packages.R
-#     - 01-download_data.R
+# Pre-requisites: 01-download_data.R
 
 
 #### Workspace setup ####
