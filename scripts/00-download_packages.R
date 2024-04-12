@@ -8,5 +8,6 @@
 
 #### Installs packages ####
 install.packages("tidyverse")
+install.packages("haven")
 install.packages("arrow")
 install.packages("janitor")
