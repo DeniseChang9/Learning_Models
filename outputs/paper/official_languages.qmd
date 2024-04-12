@@ -22,15 +22,13 @@ library(tidyverse)
 # Introduction
 In 1969, Canada adopted the Official Languages Act which recognizes both English and French as its official languages [CITE SMT]. Though Canada is a bilingual country, seven provinces recognizes English as their sole official language, and one province considers their official language to be French. New-Brunswick is the only bilingual province [CITE SMT]. To encourage bilingualism, English-speaking provinces promote French as second language through educational programs, such as the French Immersion Program in Ontario. However, the French-speaking province, Quebec, restricts the usage of English. Instead, Quebec pushes forward programs and policies to further promote the French language [CITE SMT]. Quebec's active francization which differentiates it from the rest of Canada sparks debate in the population as it seems to go against Canadian bilingualism. 
 
+In this paper, I am interested in the evolution of the knowledge of canadian official languages in Quebec. Using data from the Canadian Language Census from 2001, 2006, 2011, 2016 and 2021, I explore the trends in Quebecers' knowledge in English and French for more insights on the influence of the government's francization efforts on the provincial bilingualism rate. I find that, despite the restriction on the usage of English in Quebec, the province has an increasing trend in bilingual population. MODIFY THIS IF NEEDED AFTER DISCUSSION
 
-
-You can and should cross-reference sections and sub-sections. 
-
-The remainder of this paper is structured as follows.
+The remainder of this paper is structured as follows. Section 2 discusses the data collection and the studied variables. Section 4 builds a model that illustrates the trend in bilingualism rate in Quebec throughout 
 
 
 
-# Data {#sec-data}
+# Data
 
 
 Talk more about it.
@@ -76,7 +74,7 @@ Our results are summarized in.
 
 # Discussion
 
-## First discussion point {#sec-first-point}
+## First discussion point
 
 If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
 
