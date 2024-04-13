@@ -18,7 +18,7 @@ library(arrow)
 raw_data <- read_dta("inputs/data/main_dataset.dta")
 
 #### Save data ####
-write_parquet(raw_data, "inputs/data/raw_dataset.parquet")
+write_parquet(raw_data, "inputs/data/raw_data.parquet")
 
 
          
