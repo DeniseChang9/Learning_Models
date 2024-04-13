@@ -12,13 +12,13 @@ library(haven)
 library(arrow)
 
 #### Download data ####
-# Download data from OPENICPSR at http://doi.org/10.3886/E159261V1 
+# Download data from OPENICPSR at http://doi.org/10.3886/E168843V1  
 
 #### Read data ####
-raw_data <- read_dta("inputs/data/main_dataset.dta")
+school_data <- read_dta("inputs/data/state_score_data.dta")
 
 #### Save data ####
-write_parquet(raw_data, "inputs/data/raw_data.parquet")
+write_parquet(school_data, "inputs/data/analysis_data.parquet")
 
 
          
