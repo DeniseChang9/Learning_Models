@@ -13,7 +13,8 @@ library(janitor)
 library(arrow)
 
 #### Clean data ####
-teeth_data <- read_parquet("inputs/data/raw_data.parquet")
+school_data <- read_parquet("inputs/data/raw_data/raw_school_data.parquet")
+district_data <- read_parquet("inputs/data/raw_data/raw_district_data.parquet")
 
 #### Save data ####
 # write_parquet(all_census_tibble, "outputs/data/clean_census_data.parquet")
