@@ -24,12 +24,51 @@ library(tidyverse)
 
 In 2020, the World's Health Organization (WHO) declared the coronavirus disease, commonly known as COVID-19, a public health emergency of international concern [@WHO]. As an airborne disease, COVID-19 was highly contagious from person to person, which made virtually all lifestyle activities a health risk during the pandemic. During this time, hosting in-person classroom activities and instructional periods were also considered a health hazard and were strongly discouraged. It attempts to support students and staff despite the uncertainty and unpredictability of the pandemic, school leaders and authorities implemented alternative learning models which offered students the opportunity to continue their studies in a safe way. In the United States, hybrid and virtual schooling modes were commonly adopted in 2020-2021 in response to the pandemic. **ANOTHER TRANSITION SENTENCE?**
 
-In this paper, I am interested in the impact of different schooling methods on US students' pass rates on state standardized exams in the pandemic school year in 2020-2021. Using district-level databases from 11 states and well as data from the Natiocal Center of Educational Statistics (NCES), I explore the changes in students' pass rates in 2020-2021 for more insights on the influence of the district's chosen learning model on the overall learning outcomes I find that, despite having the same curriculum, the decline in student pass rate is notably more obvious for schools who had a higher share in virtual or hybrid schooling modes. More specifically, (pass rates in English + Math) which results in an overall decline of ____% during the pandemic year. Also, I also find that schools with higher shares of black and hispanic students saw a greater decline in student pass rates. 
-**MODIFY THIS IF NEEDED AFTER DISCUSSION** I can maybe show some stats here already??
+In this paper, I am interested in the impact of different schooling methods on US students' pass rates on state standardized exams in the pandemic school year in 2020-2021. Using district-level databases from 11 states and well as data from the Natiocal Center of Educational Statistics (NCES), I explore the changes in students' pass rates in 2020-2021 for more insights on the influence of the district's chosen learning model on the overall learning outcomes I find that, despite having the same curriculum, the decline in student pass rate is notably more obvious for schools who had a higher share in virtual or hybrid schooling modes. More specifically, (pass rates in English + Math) which results in an overall decline of \_\_\_\_% during the pandemic year. Also, I also find that schools with higher shares of black and hispanic students saw a greater decline in student pass rates. **MODIFY THIS IF NEEDED AFTER DISCUSSION** I can maybe show some stats here already??
 
-The remainder of this paper is structured as follows. Section 2 discusses the data collection and the studied variables. Section 3 builds a model that suggests a relationship between learning models and student pass rates. Section 4 presents results and findings of the exploration for the dataset with the help of visualized data. Section 5 explores further insights from section 4 and discusses a few weaknesses and limitations of this study. This section also suggests potentional next steps following this paper. 
+The remainder of this paper is structured as follows. Section 2 discusses the data collection and the studied variables. Section 3 builds a model that suggests a relationship between learning models and student pass rates. Section 4 presents results and findings of the exploration for the dataset with the help of visualized data. Section 5 explores further insights from section 4 and discusses a few weaknesses and limitations of this study. This section also suggests potential next steps following this paper.
 
 # Data
+
+Here do the shotgun package thanks..
+
+## Source and Data Collection
+
+The paper and raw data used for replication is obtained from "Pandemic Schooling Modes and Student Test Scores: Evidence from US School Districts" [@OG], published in the American Economic Association's *American Economic Review: Insights* [@AEA]. The downloaded data is built from district-level schooling mode data from the 2020-2021 schooling year and from district-level standardized assessment data from Spring 2019-2019 and 2021. I also downloaded additional district-level demographic data for this investigation. Detailed explanation of each data source and data collection method is given below.
+
+### District-Level Schooling Methods
+
+Data on district-level schooling methods are downloaded from the COVID-19 School Data Hub [@datahub]. This is a public database which aggregates state-sourced data to provide information on schooling modes and learning models by school districts during the 2020-2021 school year. Typically, the state-sourced data are State Education Agencies (SEA).
+
+For each district in the United States, this database provides information on the percentage of the academic spent in each of type of schooling methods. To collect this data, the COVID-19 School Data Hub Team submitted data requests to state education agencies. They requested records of learning models used by schools and/or districts in the 2020-2021 academic school year. The renewal frequency of the data depends on on each school and districts where some would send new records weekly, while others would send the records in monthly. States who provided data monthly, bi-weekly or weekly during 2020-2021 year were included in this analysis.
+
+### District-Level Assessment Data
+
+Data on students' pass rates by district
+
+### Source 3
+
+Our final sample includes 11 states: Colorado, Connecticut, Massachusetts, Minnesota, Mississippi, Ohio, Rhode Island, Virginia, West Virginia, Wisconsin and Wyoming.
+
+## Variables of Interest
+
+### Schooling Modes
+
+The possible schooling modes are in-person, virtual and hybrid learning models. In the analysis data, the schooling modes are defined and determined as follows:
+
+-   In-person: All or most students have access to traditional in-person instruction five days a week.
+
+-   Virtual: All or most students receive instruction online five days a week. Online instruction includes synchronous, asynchronous or a combination of synchronous and asynchronous activites.\
+
+-   Hybrid: Schooling modes that do not correspond to any of the previous two models. Usually, this is a combination of the previous two.
+
+### Pass rates
+
+### Schooling Modes
+
+### Demographic Characteristics
+
+### Subject
 
 Talk more about it.
 
@@ -79,8 +118,6 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
-
-\newpage
+weakness 1 : missing data weakness 2 : definiton of in-person instruction. Access to in-perosn does not mean everyone actually did it online. Some may have opted to do it online for health reasons. \newpage
 
 # References
