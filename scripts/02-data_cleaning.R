@@ -39,8 +39,7 @@ clean_district_data <-
 
 cleaner_school_data <- 
   clean_school_data |>
-  left_join(clean_district_data, by = "leaid") |>
-  select(-leaid)
+  left_join(clean_district_data, by = "leaid")
 
 #### Save data ####
 write_parquet(cleaner_school_data, "outputs/data/analysis_data.parquet")

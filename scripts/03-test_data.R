@@ -40,7 +40,7 @@ all(rowSums(demographic_shares, na.rm = TRUE) >= 0.9995)
 # check that all shares and rates are valid numbers
 num_data <-
   na.omit(clean_data) |>
-  select(-subject, -year, -state_mailing)
+  select(-leaid, -subject, -year, -state_mailing)
 
 all(num_data <= 1)
 all(num_data >= 0)
