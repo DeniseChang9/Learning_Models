@@ -1,10 +1,12 @@
 ---
-title: "Active Francization on the Knowledge of Canadian Official Languages in Quebec from 2001 to 2021"
+title: "Schooling Methods in Student Test Scores"
 author: Denise Chang
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
-abstract: "Despite the adoption of the Official Languages Act in 1969, Quebec is the only province to recognize French as its sole official language in Canada. This paper investigates the knowledge of canadian official langauges in Quebec using data from Canadian Language censuses from 2001 to 2021. The exploration of the data suggests that the Language policies and the active francization of Quebec contributes to a higher bilingualism in the province. The results of this study are significant, as official bilingualism is closely tied to Canada's history and cultural identity. Promoting bilingualism is also important as it fosters understanding between English- and French-speaking communities. "
+abstract: "An increasing number of schools and universitities have been adopting virtual or hybrid teaching methods ever since the COVID-19 pandemic in 2020. Using data from the National Center for Education Statistics and from various district-level assessements, this paper investigates the impact of schooling modes on students' pass rate in standardized tests in grades 3-8 from 2017 to 2021. The exploration of the data across 11 states suggests that overall pass rates declined from 2019 to 2021,"
+
+"Despite the adoption of the Official Languages Act in 1969, Quebec is the only province to recognize French as its sole official language in Canada. This paper investigates the knowledge of canadian official langauges in Quebec using data from Canadian Language censuses from 2001 to 2021. The exploration of the data suggests that the Language policies and the active francization of Quebec contributes to a higher bilingualism in the province. The results of this study are significant, as official bilingualism is closely tied to Canada's history and cultural identity. Promoting bilingualism is also important as it fosters understanding between English- and French-speaking communities."
 format: pdf
 number-sections: true
 bibliography: references.bib
