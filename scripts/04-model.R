@@ -20,14 +20,13 @@ agg_data <-
   select(pass_rate, share_inperson, share_virtual, share_hybrid)
 
 ### Model data ####
+
 first_model <-
   stan_glm(
-    formula = pass_rate ~ share_inperson + + share_virtual + share_hybrid,
+    formula = pass_rate ~ share_inperson + share_virtual + share_hybrid,
     data = agg_data,
     family = gaussian(),
-    prior = normal(location = 0, scale = 2, autoscale = TRUE),
-    prior_intercept = normal(location = 0, scale = 2, autoscale = TRUE),
-    prior_aux = exponential(rate = 1, autoscale = TRUE),
+    prior = normal(location = 0, scale = 2),
     seed = 302
   )
 
