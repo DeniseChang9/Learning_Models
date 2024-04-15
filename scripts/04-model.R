@@ -20,7 +20,6 @@ agg_data <-
   select(pass_rate, share_inperson, share_virtual, share_hybrid)
 
 ### Model data ####
-
 first_model <-
   stan_glm(
     formula = pass_rate ~ share_inperson + share_virtual + share_hybrid,
