@@ -20,8 +20,7 @@ clean_school_data <-
   school_data |>
   select(leaid, subject, year,
          pass3, pass4, pass5, pass6, pass6, pass7, pass8, 
-         share_inperson, share_virtual, share_hybrid,
-         share_black, share_white, share_hisp, share_other)
+         share_inperson, share_virtual, share_hybrid)
 
 # make both values the same data type
 district_data <- 

@@ -29,14 +29,6 @@ schooling_shares <-
 all(rowSums(schooling_shares, na.rm = TRUE) <= 1.0005)
 all(rowSums(schooling_shares, na.rm = TRUE) >= 0.9995)
 
-# check that the demographic shares are whole with error
-demographic_shares <- 
-  na.omit(clean_data) |>
-  select(share_black, share_white, share_hisp, share_other)
-
-all(rowSums(demographic_shares, na.rm = TRUE) <= 1.0005)
-all(rowSums(demographic_shares, na.rm = TRUE) >= 0.9995)
-
 # check that all shares and rates are valid numbers
 num_data <-
   na.omit(clean_data) |>
