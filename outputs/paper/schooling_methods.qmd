@@ -4,7 +4,7 @@ author: Denise Chang
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
-abstract: "An increasing number of schools and universitities have adopted virtual or hybrid teaching methods ever since the COVID-19 pandemic in 2020. Using data from the National Center for Education Statistics and from various district-level assessements, this paper investigates the impact of schooling modes on students' pass rate in state standardized assessments in grades 3-8 during the 2020-2021 school year. The exploration of the data across 11 states suggests that the overall student pass rates declined during the pandemic school year. The pass rates have also seen more drastic changes in schools with larger share of black students as well as in schools who had a higher share of virtual and hybrid schooling. The results of this study are significant as they can be used by educational authorities and policymakers to support student learning."
+abstract: "An increasing number of schools and universitities have adopted virtual or hybrid teaching methods ever since the COVID-19 pandemic in 2020. Using data from the National Center for Education Statistics and from various district-level assessements, this paper investigates the impact of schooling modes on students' pass rate in state standardized assessments in grades 3-8 during the 2020-2021 school year. The exploration of the data across 11 states suggests that the overall student pass rates declined during the pandemic school year. The pass rates have also seen more drastic changes in schools who had a higher share of virtual and hybrid schooling. The results of this study are significant as they can be used by educational authorities and policymakers to support student learning."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -21,6 +21,7 @@ library(tidyverse)
 library(knitr)
 library(here)
 library(arrow)
+library(gridExtra)
 ```
 
 # Introduction
@@ -102,35 +103,7 @@ rate_data <-
 rate_data
 ```
 
-The downloaded dataset includes states which had at least two years of pre-pandemic test data available and had no significant changes to the assessment content. Certain states such as Alaska, Nevada and New York were were excluded from the analysis as these states presented low assessment participation rate in 2021.
-
-### District-Level Demographic Data
-
-Data on student demographic are downloaded from the National Center for Education Statistics (NCES), accessible via the Urban Institute's Education Data Portal. @tbl-demographics_data includes information on district-level share of enrolled students by race and ethnicity in the 2020-2021 school year. This information is collected through voluntary surveys by district.
-
-```{r}
-#| message: false
-#| echo: false
-#| label: tbl-demographics_data
-#| tbl-cap: First Six Rows of Demographic Shares by District during the 2020-2021 School Year
-
-# visualize the first 6 rows of the data
-demographic_data <-
-  all_data |>
-  filter(year == 2021) |>
-  select(leaid, state_mailing, share_black, share_hisp, share_other) |>
-  slice(1:6) |>
-  mutate(share_black = round(share_black * 100, 2),
-         share_hisp = round(share_hisp * 100, 2),
-         share_other = round(share_other * 100, 2)) |>
-  arrange(leaid) |>
-  kable(col.names = c("District ID", "State", "Black Students (%)", "Hispanic Students (%)", "Other Students (%)")
-  )
-
-demographic_data
-```
-
-Based on the state selection criteria previously discussed, the final analysis data captures 11 majors states in the United States: Colorado (CO), Connecticut (CT), Massachusetts (MA), Minnesota (MN), Mississippi (MS), Ohio (OH), Rhode Island (RI), Virginia (VA), West Virginia (WV), Wisconsin (WI) and Wyoming (WY).
+The downloaded dataset includes states which had at least two years of pre-pandemic test data available and had no significant changes to the assessment content. Certain states such as Alaska, Nevada and New York were were excluded from the analysis as these states presented low assessment participation rate in 2021. Based on the state selection criteria previously discussed, the final analysis data captures 11 majors states in the United States: Colorado (CO), Connecticut (CT), Massachusetts (MA), Minnesota (MN), Mississippi (MS), Ohio (OH), Rhode Island (RI), Virginia (VA), West Virginia (WV), Wisconsin (WI) and Wyoming (WY).
 
 ## Variables of Interest
 
@@ -184,11 +157,143 @@ In this model, we define the variables as follows:
 
 We expect a positive relationship between the size of the wings and time spent aloft. In particular...
 how to justify a model????
+results of model + summary()
 
 # Results
-results of model + summary()
-do the graphs with the dots (see what other people did)
+```{r}
+#| include: false
+#| warning: false
+#| message: false
 
+# Construct summarized pass rate data
+clean_data <-
+  all_data |>
+  mutate(pass_rate = (pass3 + pass4 + pass5 +pass6 + pass7 + pass8) / 6) |>
+  select(pass_rate, year, subject, share_inperson, share_virtual, share_hybrid) |>
+  mutate(pass_rate = pass_rate * 100,
+         share_inperson = share_inperson * 100,
+         share_virtual = share_virtual * 100,
+         share_hybrid = share_hybrid * 100)
+
+# Filter math data
+math_data <-
+  clean_data |>
+  filter(subject == "math")
+
+# Filter ELA data
+ela_data <-
+  clean_data |>
+  filter(subject == "ela")
+
+```
+
+
+## In-person learning model on pass rates
+```{r}
+#| label: fig-in-person
+#| echo: false
+#| message: false
+#| fig-cap: "Enrollment-weighted average change in pass rates in Math standardised tests by the percent of in-person learning."
+
+# Prepare data for in-person learning model in MATH
+sorted_math_inperson <- 
+  math_data |>
+  mutate(inperson_group = cut(share_inperson,
+                              breaks = c(0, 25, 50, 75, 100),
+                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                              include.lowest = TRUE))
+average_pass_rates <- 
+  sorted_math_inperson |>
+  group_by(year, inperson_group) |>
+  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
+
+# Shape to wide format
+df_wide <- average_pass_rates |> 
+  spread(key = year, value = average_pass_rate)
+
+# Calculate the changes for specified year pairs
+df_wide <- 
+  df_wide |>
+  mutate(`change_2016-2017` = `2017` - `2016`,
+         `change_2017-2018` = `2018` - `2017`,
+         `change_2018-2019` = `2019` - `2018`,
+         `change_2019-2021` = `2021` - `2019`)
+
+# Reshape back to long format
+long_filtered_test_data <- 
+  df_wide |>
+  pivot_longer(cols = starts_with("change_"),
+               names_to = "year",
+               values_to = "change_in_pass_rate")
+
+# Plot the resultant graph
+in_person_math <-
+  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = inperson_group, color = factor(year))) +
+  geom_point(size = 4) + 
+  geom_vline(xintercept = 0, color = "darkgrey") +
+  labs(x = "Average Change in Pass Rate in Math (%)", y = "Percent In-Person") +
+  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
+  labs(color = "Year Category") +
+  theme_minimal()
+
+# Prepare data for in-person learning model in ELA
+sorted_ela_inperson <- 
+  ela_data |>
+  mutate(inperson_group = cut(share_inperson,
+                              breaks = c(0, 25, 50, 75, 100),
+                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                              include.lowest = TRUE))
+average_pass_rates <- 
+  sorted_ela_inperson |>
+  group_by(year, inperson_group) |>
+  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
+
+# Shape to wide format
+df_wide <- average_pass_rates |> 
+  spread(key = year, value = average_pass_rate)
+
+# Calculate the changes for specified year pairs
+df_wide <- 
+  df_wide |>
+  mutate(`change_2016-2017` = `2017` - `2016`,
+         `change_2017-2018` = `2018` - `2017`,
+         `change_2018-2019` = `2019` - `2018`,
+         `change_2019-2021` = `2021` - `2019`)
+
+# Reshape back to long format
+long_filtered_test_data <- 
+  df_wide |>
+  pivot_longer(cols = starts_with("change_"),
+               names_to = "year",
+               values_to = "change_in_pass_rate")
+
+# Plot the resultant graph
+in_person_ela <-
+  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = inperson_group, color = factor(year))) +
+  geom_point(size = 4) + 
+  geom_vline(xintercept = 0, color = "darkgrey") +
+  labs(x = "Average Change in Pass Rate in ELA (%)", y = "Percent In-Person") +
+  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
+  labs(color = "Year Category") +
+  theme_minimal()
+
+# Combine both graphs 
+grid.arrange(
+  in_person_math, in_person_ela,
+  nrow = 1, 
+  heights = c(1, 1)
+)
+```
+
+
+## Virtual learning model on pass rates
+
+## Hybrid learning model on pass rates
+Percent in-person (math/english)
+Percent virtual (math/english)
+Percent hybrid (math/english)
+
+do the graphs with the dots (see what other people did)
 
 # Discussion
 mental health component of virtual learning (social kakashi, health kakashi)
