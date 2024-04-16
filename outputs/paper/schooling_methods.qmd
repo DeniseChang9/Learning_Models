@@ -22,6 +22,7 @@ library(knitr)
 library(here)
 library(arrow)
 library(gridExtra)
+library(cowplot)
 ```
 
 # Introduction
@@ -283,17 +284,208 @@ grid.arrange(
   ncol = 1,
   heights = c(1, 1)
 )
+
 ```
 
 
 ## Virtual learning model on pass rates
+```{r}
+#| label: fig-virtual
+#| echo: false
+#| message: false
+#| fig-cap: "Average change in pass rates in standardised tests by the percent of virtual learning"
+
+# Prepare data for virtual learning model in MATH
+sorted_math_virtual <- 
+  math_data |>
+  mutate(virtual_group = cut(share_virtual,
+                              breaks = c(0, 25, 50, 75, 100),
+                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                              include.lowest = TRUE))
+average_pass_rates <- 
+  sorted_math_virtual |>
+  group_by(year, virtual_group) |>
+  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
+
+# Shape to wide format
+df_wide <- average_pass_rates |> 
+  spread(key = year, value = average_pass_rate)
+
+# Calculate the changes for specified year pairs
+df_wide <- 
+  df_wide |>
+  mutate(`change_2016-2017` = `2017` - `2016`,
+         `change_2017-2018` = `2018` - `2017`,
+         `change_2018-2019` = `2019` - `2018`,
+         `change_2019-2021` = `2021` - `2019`)
+
+# Reshape back to long format
+long_filtered_test_data <- 
+  df_wide |>
+  pivot_longer(cols = starts_with("change_"),
+               names_to = "year",
+               values_to = "change_in_pass_rate")
+
+# Plot the resultant graph
+virtual_math <-
+  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = virtual_group, color = factor(year))) +
+  geom_point(size = 4) + 
+  geom_vline(xintercept = 0, color = "darkgrey") +
+  labs(x = "Change Rate in Math (%)", y = "Percent Virtual") +
+  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
+  labs(color = "Year Category") +
+  theme_minimal()
+
+# Prepare data for in-person learning model in ELA
+sorted_ela_virtual <- 
+  ela_data |>
+  mutate(virtual_group = cut(share_virtual,
+                              breaks = c(0, 25, 50, 75, 100),
+                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                              include.lowest = TRUE))
+average_pass_rates <- 
+  sorted_ela_virtual |>
+  group_by(year, virtual_group) |>
+  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
+
+# Shape to wide format
+df_wide <- average_pass_rates |> 
+  spread(key = year, value = average_pass_rate)
+
+# Calculate the changes for specified year pairs
+df_wide <- 
+  df_wide |>
+  mutate(`change_2016-2017` = `2017` - `2016`,
+         `change_2017-2018` = `2018` - `2017`,
+         `change_2018-2019` = `2019` - `2018`,
+         `change_2019-2021` = `2021` - `2019`)
+
+# Reshape back to long format
+long_filtered_test_data <- 
+  df_wide |>
+  pivot_longer(cols = starts_with("change_"),
+               names_to = "year",
+               values_to = "change_in_pass_rate")
+
+# Plot the resultant graph
+virtual_ela <-
+  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = virtual_group, color = factor(year))) +
+  geom_point(size = 4) + 
+  geom_vline(xintercept = 0, color = "darkgrey") +
+  labs(x = "Change Rate in ELA (%)", y = "Percent Virtual") +
+  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
+  labs(color = "Year Category") +
+  theme_minimal()
+
+# Combine both graphs 
+grid.arrange(
+virtual_math, virtual_ela,
+  ncol = 1,
+  heights = c(1, 1)
+)
+
+```
+
 
 ## Hybrid learning model on pass rates
-Percent in-person (math/english)
-Percent virtual (math/english)
-Percent hybrid (math/english)
 
-do the graphs with the dots (see what other people did)
+```{r}
+#| label: fig-hybrid
+#| echo: false
+#| message: false
+#| fig-cap: "Average change in pass rates in standardised tests by the percent of hybrid learning"
+
+# Prepare data for virtual learning model in MATH
+sorted_math_hybrid <- 
+  math_data |>
+  mutate(hybrid_group = cut(share_hybrid,
+                              breaks = c(0, 25, 50, 75, 100),
+                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                              include.lowest = TRUE))
+average_pass_rates <- 
+  sorted_math_hybrid |>
+  group_by(year, hybrid_group) |>
+  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
+
+# Shape to wide format
+df_wide <- average_pass_rates |> 
+  spread(key = year, value = average_pass_rate)
+
+# Calculate the changes for specified year pairs
+df_wide <- 
+  df_wide |>
+  mutate(`change_2016-2017` = `2017` - `2016`,
+         `change_2017-2018` = `2018` - `2017`,
+         `change_2018-2019` = `2019` - `2018`,
+         `change_2019-2021` = `2021` - `2019`)
+
+# Reshape back to long format
+long_filtered_test_data <- 
+  df_wide |>
+  pivot_longer(cols = starts_with("change_"),
+               names_to = "year",
+               values_to = "change_in_pass_rate")
+
+# Plot the resultant graph
+hybrid_math <-
+  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = hybrid_group, color = factor(year))) +
+  geom_point(size = 4) + 
+  geom_vline(xintercept = 0, color = "darkgrey") +
+  labs(x = "Change Rate in Math (%)", y = "Percent Hybrid") +
+  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
+  labs(color = "Year Category") +
+  theme_minimal()
+
+# Prepare data for in-person learning model in ELA
+sorted_ela_hybrid <- 
+  ela_data |>
+  mutate(hybrid_group = cut(share_hybrid,
+                              breaks = c(0, 25, 50, 75, 100),
+                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                              include.lowest = TRUE))
+average_pass_rates <- 
+  sorted_ela_hybrid |>
+  group_by(year, hybrid_group) |>
+  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
+
+# Shape to wide format
+df_wide <- average_pass_rates |> 
+  spread(key = year, value = average_pass_rate)
+
+# Calculate the changes for specified year pairs
+df_wide <- 
+  df_wide |>
+  mutate(`change_2016-2017` = `2017` - `2016`,
+         `change_2017-2018` = `2018` - `2017`,
+         `change_2018-2019` = `2019` - `2018`,
+         `change_2019-2021` = `2021` - `2019`)
+
+# Reshape back to long format
+long_filtered_test_data <- 
+  df_wide |>
+  pivot_longer(cols = starts_with("change_"),
+               names_to = "year",
+               values_to = "change_in_pass_rate")
+
+# Plot the resultant graph
+hybrid_ela <-
+  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = hybrid_group, color = factor(year))) +
+  geom_point(size = 4) + 
+  geom_vline(xintercept = 0, color = "darkgrey") +
+  labs(x = "Change Rate in ELA (%)", y = "Percent Hybrid") +
+  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
+  labs(color = "Year Category") +
+  theme_minimal()
+
+# Combine both graphs 
+grid.arrange(
+hybrid_math, hybrid_ela,
+  ncol = 1,
+  heights = c(1, 1)
+)
+
+```
+
 
 # Discussion
 mental health component of virtual learning (social kakashi, health kakashi)
