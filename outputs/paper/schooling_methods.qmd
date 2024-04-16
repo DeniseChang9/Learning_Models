@@ -193,7 +193,7 @@ ela_data <-
 #| label: fig-in-person
 #| echo: false
 #| message: false
-#| fig-cap: "Enrollment-weighted average change in pass rates in Math standardised tests by the percent of in-person learning."
+#| fig-cap: "Average change in pass rates in standardised tests by the percent of in-person learning"
 
 # Prepare data for in-person learning model in MATH
 sorted_math_inperson <- 
@@ -231,7 +231,7 @@ in_person_math <-
   ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = inperson_group, color = factor(year))) +
   geom_point(size = 4) + 
   geom_vline(xintercept = 0, color = "darkgrey") +
-  labs(x = "Average Change in Pass Rate in Math (%)", y = "Percent In-Person") +
+  labs(x = "Change Rate in Math (%)", y = "Percent In-Person") +
   scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
   labs(color = "Year Category") +
   theme_minimal()
@@ -272,7 +272,7 @@ in_person_ela <-
   ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = inperson_group, color = factor(year))) +
   geom_point(size = 4) + 
   geom_vline(xintercept = 0, color = "darkgrey") +
-  labs(x = "Average Change in Pass Rate in ELA (%)", y = "Percent In-Person") +
+  labs(x = "Change Rate in ELA (%)", y = "Percent In-Person") +
   scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
   labs(color = "Year Category") +
   theme_minimal()
@@ -280,7 +280,7 @@ in_person_ela <-
 # Combine both graphs 
 grid.arrange(
   in_person_math, in_person_ela,
-  nrow = 1, 
+  ncol = 1,
   heights = c(1, 1)
 )
 ```
