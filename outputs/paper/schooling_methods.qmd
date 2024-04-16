@@ -150,42 +150,54 @@ Pass rates are calculated by dividing the number of students who passes standard
 
 # Model
 
-Through data analysis and exploration
+Through the exploration and the analysis of the data, I discover there is a correlation between learning model shares and students' pass rates on state assessments. To infer the efficiency of each learning models, we construct a Bayesian generalized linear model.
 
 ## Model set-up
 
-Through the data analysis of this paper, we discovered that there is a correlation
-between a child’s age and the number of American Sign Language vocabulary
-items that they are able to produce, which has implications for their overall
-vocabulary development in ASL. To further analyze and infer the age timeline
-at which children can produce a certain number of vocabulary words in sign
-language, we constructed a linear regression model.
-Thus, we estimate the following model:
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.
+The model is run in R [@R] using the `rstanarm` package of @rstanarm using the default priors from `rstanarm`. The estimating equating is as follows:
 
 ```{=tex}
 \begin{align}
-\mu_i &= \beta_0 + \beta_1 \times \mbox{in-person} + \beta_2 \times \mbox{virtual} + \beta_3 \times \mbox{hybrid} \\
+Y_{i} &= \beta_0 + \beta_1 \times \mbox{in-person} + \beta_2 \times \mbox{virtual} + \beta_3 \times \mbox{hybrid} + \epsilon\\
 \beta_0 &\sim \text{Normal}(0, 2) \\
 \beta_1 &\sim \text{Normal}(0, 2) \\
 \beta_2 &\sim \text{Normal}(0, 2) \\
-\beta_3 &\sim \text{Normal}(0, 2) \\
+\beta_3 &\sim \text{Normal}(0, 2)
 \end{align}
 ```
-We run the model in R [@R] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
 
-### Model justification
+In this model, we define the variables as follows:
+
+-   $Y_i$ is students' pass rates on the math and ELA state standardized assessments. 
+
+-   $\beta_0$ is the coefficient for intercept.
+
+-   $\beta_1$ is the coefficient of the percentage of time spent in an in-person learning model.
+
+-   $\beta_2$ is the coefficient of the percentage of time spent in a virtual learning model.
+
+-   $\beta_3$ is the coefficient of the percentage of time spent in a hybrid learning model.
+
+-   $\epsilon$ is the fixed effects from districts, years and location. 
+
+## Model justification
 
 We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
+how to justify a model????
 
 # Results
+results of model + summary()
+do the graphs with the dots (see what other people did)
 
-Our results are summarized in.
 
 # Discussion
+mental health component of virtual learning (social kakashi, health kakashi)
+
+transition to virtual => learning to adapt a lot of trial and error
+
+difference between grades? =>younger had less difference since their curriculum is easier to understand?
+
+difference between demographic => maybe there was something to discuss about resources
 
 ## First discussion point
 
@@ -196,7 +208,15 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 ## Third discussion point
 
 ## Weaknesses and next steps
+### Weaknesses
+A weakness in using data from the 
 
-weakness 1 : missing data weakness 2 : definiton of in-person instruction. Access to in-perosn does not mean everyone actually did it online. Some may have opted to do it online for health reasons. weakness 3: different testing conditions (p.6 OG) some people had post-pandemic testing online or even had more time via a governmental waiver. \newpage
+weakness 1 : missing data => data failed test
+weakness 2 : definiton of in-person instruction. Access to in-perosn does not mean everyone actually did it online. Some may have opted to do it online for health reasons. 
+
+### Next steps
+testing are only one way to evaluate student learning such as peer assessment + self-assessments
+
+ \newpage 
 
 # References
