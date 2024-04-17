@@ -65,11 +65,12 @@ mode_data <-
   filter(year == 2021) |>
   select(leaid, share_inperson, share_virtual, share_hybrid) |>
   slice(1:6) |>
-  mutate(share_inperson = round(share_inperson * 100, 2),
-         share_virtual = round(share_virtual * 100, 2), 
-         share_hybrid = round(share_hybrid * 100, 2)) |>
-  kable(col.names = c("District ID", "In-person Model (%)", "% Virtual Model (%)", "Hybrid Model (%)")
-  )
+  mutate(
+    share_inperson = round(share_inperson * 100, 2),
+    share_virtual = round(share_virtual * 100, 2),
+    share_hybrid = round(share_hybrid * 100, 2)
+  ) |>
+  kable(col.names = c("District ID", "In-person Model (%)", "% Virtual Model (%)", "Hybrid Model (%)"))
 
 mode_data
 ```
@@ -91,15 +92,16 @@ rate_data <-
   all_data |>
   select(leaid, subject, year, pass3, pass4, pass5, pass6, pass7, pass8) |>
   slice(1:6) |>
-  mutate(pass3 = round(pass3 * 100, 2),
-         pass4 = round(pass4 * 100, 2),
-         pass5 = round(pass5 * 100, 2),
-         pass6 = round(pass6 * 100, 2),
-         pass7 = round(pass7 * 100, 2),
-         pass8 = round(pass8 * 100, 2),) |>
+  mutate(
+    pass3 = round(pass3 * 100, 2),
+    pass4 = round(pass4 * 100, 2),
+    pass5 = round(pass5 * 100, 2),
+    pass6 = round(pass6 * 100, 2),
+    pass7 = round(pass7 * 100, 2),
+    pass8 = round(pass8 * 100, 2),
+  ) |>
   arrange(leaid) |>
-  kable(col.names = c("District ID", "Subject", "Year", "Grade 3 (%)", "Grade 4 (%)", "Grade 5 (%)", "Grade 6 (%)", "Grade 7 (%)", "Grade 8 (%)")
-  )
+  kable(col.names = c("District ID", "Subject", "Year", "Grade 3 (%)", "Grade 4 (%)", "Grade 5 (%)", "Grade 6 (%)", "Grade 7 (%)", "Grade 8 (%)"))
 
 rate_data
 ```
@@ -187,12 +189,14 @@ This sub-section uses the data described in Section 2 to examine changes in dist
 # Construct summarized pass rate data
 clean_data <-
   all_data |>
-  mutate(pass_rate = (pass3 + pass4 + pass5 +pass6 + pass7 + pass8) / 6) |>
+  mutate(pass_rate = (pass3 + pass4 + pass5 + pass6 + pass7 + pass8) / 6) |>
   select(pass_rate, year, subject, share_inperson, share_virtual, share_hybrid) |>
-  mutate(pass_rate = pass_rate * 100,
-         share_inperson = share_inperson * 100,
-         share_virtual = share_virtual * 100,
-         share_hybrid = share_hybrid * 100)
+  mutate(
+    pass_rate = pass_rate * 100,
+    share_inperson = share_inperson * 100,
+    share_virtual = share_virtual * 100,
+    share_hybrid = share_hybrid * 100
+  )
 
 # Filter math data
 math_data <-
@@ -203,7 +207,6 @@ math_data <-
 ela_data <-
   clean_data |>
   filter(subject == "ela")
-
 ```
 
 ### In-person learning model on pass rates
@@ -214,40 +217,45 @@ ela_data <-
 #| fig-cap: "Average change in pass rates in standardised tests by the percent of in-person learning"
 
 # Prepare data for in-person learning model in MATH
-sorted_math_inperson <- 
+sorted_math_inperson <-
   math_data |>
   mutate(inperson_group = cut(share_inperson,
-                              breaks = c(0, 25, 50, 75, 100),
-                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
-                              include.lowest = TRUE))
-average_pass_rates <- 
+    breaks = c(0, 25, 50, 75, 100),
+    labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+    include.lowest = TRUE
+  ))
+average_pass_rates <-
   sorted_math_inperson |>
   group_by(year, inperson_group) |>
   summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
 
 # Shape to wide format
-df_wide <- average_pass_rates |> 
+df_wide <- average_pass_rates |>
   spread(key = year, value = average_pass_rate)
 
 # Calculate the changes for specified year pairs
-df_wide <- 
+df_wide <-
   df_wide |>
-  mutate(`change_2016-2017` = `2017` - `2016`,
-         `change_2017-2018` = `2018` - `2017`,
-         `change_2018-2019` = `2019` - `2018`,
-         `change_2019-2021` = `2021` - `2019`)
+  mutate(
+    `change_2016-2017` = `2017` - `2016`,
+    `change_2017-2018` = `2018` - `2017`,
+    `change_2018-2019` = `2019` - `2018`,
+    `change_2019-2021` = `2021` - `2019`
+  )
 
 # Reshape back to long format
-long_filtered_test_data <- 
+long_filtered_test_data <-
   df_wide |>
-  pivot_longer(cols = starts_with("change_"),
-               names_to = "year",
-               values_to = "change_in_pass_rate")
+  pivot_longer(
+    cols = starts_with("change_"),
+    names_to = "year",
+    values_to = "change_in_pass_rate"
+  )
 
 # Plot the resultant graph
 in_person_math <-
   ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = inperson_group, color = factor(year))) +
-  geom_point(size = 4) + 
+  geom_point(size = 4) +
   geom_vline(xintercept = 0, color = "darkgrey") +
   labs(x = "Change Rate in Math (%)", y = "Percent In-Person") +
   scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
@@ -255,53 +263,57 @@ in_person_math <-
   theme_minimal()
 
 # Prepare data for in-person learning model in ELA
-sorted_ela_inperson <- 
+sorted_ela_inperson <-
   ela_data |>
   mutate(inperson_group = cut(share_inperson,
-                              breaks = c(0, 25, 50, 75, 100),
-                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
-                              include.lowest = TRUE))
-average_pass_rates <- 
+    breaks = c(0, 25, 50, 75, 100),
+    labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+    include.lowest = TRUE
+  ))
+average_pass_rates <-
   sorted_ela_inperson |>
   group_by(year, inperson_group) |>
   summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
 
 # Shape to wide format
-df_wide <- average_pass_rates |> 
+df_wide <- average_pass_rates |>
   spread(key = year, value = average_pass_rate)
 
 # Calculate the changes for specified year pairs
-df_wide <- 
+df_wide <-
   df_wide |>
-  mutate(`change_2016-2017` = `2017` - `2016`,
-         `change_2017-2018` = `2018` - `2017`,
-         `change_2018-2019` = `2019` - `2018`,
-         `change_2019-2021` = `2021` - `2019`)
+  mutate(
+    `change_2016-2017` = `2017` - `2016`,
+    `change_2017-2018` = `2018` - `2017`,
+    `change_2018-2019` = `2019` - `2018`,
+    `change_2019-2021` = `2021` - `2019`
+  )
 
 # Reshape back to long format
-long_filtered_test_data <- 
+long_filtered_test_data <-
   df_wide |>
-  pivot_longer(cols = starts_with("change_"),
-               names_to = "year",
-               values_to = "change_in_pass_rate")
+  pivot_longer(
+    cols = starts_with("change_"),
+    names_to = "year",
+    values_to = "change_in_pass_rate"
+  )
 
 # Plot the resultant graph
 in_person_ela <-
   ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = inperson_group, color = factor(year))) +
-  geom_point(size = 4) + 
+  geom_point(size = 4) +
   geom_vline(xintercept = 0, color = "darkgrey") +
   labs(x = "Change Rate in ELA (%)", y = "Percent In-Person") +
   scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
   labs(color = "Year Category") +
   theme_minimal()
 
-# Combine both graphs 
+# Combine both graphs
 grid.arrange(
   in_person_math, in_person_ela,
   ncol = 1,
   heights = c(1, 1)
 )
-
 ```
 
 @fig-in-person shows an obvious decline in pass rates from the 2018-2019 to the 2020-2021 school year for all shares of in-person learning. There is a clear fall in the pass rates overall in both subject areas in Spring 2021 from 2019. This fall is much more pronounced in Math than ELA, which has a change rate of -11.9% compared to the -6.6%, respectively.
@@ -316,40 +328,45 @@ Additionally, there is evidence indicating that a greater portion of in-person l
 #| fig-cap: "Average change in pass rates in standardised tests by the percent of virtual learning"
 
 # Prepare data for virtual learning model in MATH
-sorted_math_virtual <- 
+sorted_math_virtual <-
   math_data |>
   mutate(virtual_group = cut(share_virtual,
-                              breaks = c(0, 25, 50, 75, 100),
-                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
-                              include.lowest = TRUE))
-average_pass_rates <- 
+    breaks = c(0, 25, 50, 75, 100),
+    labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+    include.lowest = TRUE
+  ))
+average_pass_rates <-
   sorted_math_virtual |>
   group_by(year, virtual_group) |>
   summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
 
 # Shape to wide format
-df_wide <- average_pass_rates |> 
+df_wide <- average_pass_rates |>
   spread(key = year, value = average_pass_rate)
 
 # Calculate the changes for specified year pairs
-df_wide <- 
+df_wide <-
   df_wide |>
-  mutate(`change_2016-2017` = `2017` - `2016`,
-         `change_2017-2018` = `2018` - `2017`,
-         `change_2018-2019` = `2019` - `2018`,
-         `change_2019-2021` = `2021` - `2019`)
+  mutate(
+    `change_2016-2017` = `2017` - `2016`,
+    `change_2017-2018` = `2018` - `2017`,
+    `change_2018-2019` = `2019` - `2018`,
+    `change_2019-2021` = `2021` - `2019`
+  )
 
 # Reshape back to long format
-long_filtered_test_data <- 
+long_filtered_test_data <-
   df_wide |>
-  pivot_longer(cols = starts_with("change_"),
-               names_to = "year",
-               values_to = "change_in_pass_rate")
+  pivot_longer(
+    cols = starts_with("change_"),
+    names_to = "year",
+    values_to = "change_in_pass_rate"
+  )
 
 # Plot the resultant graph
 virtual_math <-
   ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = virtual_group, color = factor(year))) +
-  geom_point(size = 4) + 
+  geom_point(size = 4) +
   geom_vline(xintercept = 0, color = "darkgrey") +
   labs(x = "Change Rate in Math (%)", y = "Percent Virtual") +
   scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
@@ -357,53 +374,57 @@ virtual_math <-
   theme_minimal()
 
 # Prepare data for in-person learning model in ELA
-sorted_ela_virtual <- 
+sorted_ela_virtual <-
   ela_data |>
   mutate(virtual_group = cut(share_virtual,
-                              breaks = c(0, 25, 50, 75, 100),
-                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
-                              include.lowest = TRUE))
-average_pass_rates <- 
+    breaks = c(0, 25, 50, 75, 100),
+    labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+    include.lowest = TRUE
+  ))
+average_pass_rates <-
   sorted_ela_virtual |>
   group_by(year, virtual_group) |>
   summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
 
 # Shape to wide format
-df_wide <- average_pass_rates |> 
+df_wide <- average_pass_rates |>
   spread(key = year, value = average_pass_rate)
 
 # Calculate the changes for specified year pairs
-df_wide <- 
+df_wide <-
   df_wide |>
-  mutate(`change_2016-2017` = `2017` - `2016`,
-         `change_2017-2018` = `2018` - `2017`,
-         `change_2018-2019` = `2019` - `2018`,
-         `change_2019-2021` = `2021` - `2019`)
+  mutate(
+    `change_2016-2017` = `2017` - `2016`,
+    `change_2017-2018` = `2018` - `2017`,
+    `change_2018-2019` = `2019` - `2018`,
+    `change_2019-2021` = `2021` - `2019`
+  )
 
 # Reshape back to long format
-long_filtered_test_data <- 
+long_filtered_test_data <-
   df_wide |>
-  pivot_longer(cols = starts_with("change_"),
-               names_to = "year",
-               values_to = "change_in_pass_rate")
+  pivot_longer(
+    cols = starts_with("change_"),
+    names_to = "year",
+    values_to = "change_in_pass_rate"
+  )
 
 # Plot the resultant graph
 virtual_ela <-
   ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = virtual_group, color = factor(year))) +
-  geom_point(size = 4) + 
+  geom_point(size = 4) +
   geom_vline(xintercept = 0, color = "darkgrey") +
   labs(x = "Change Rate in ELA (%)", y = "Percent Virtual") +
   scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
   labs(color = "Year Category") +
   theme_minimal()
 
-# Combine both graphs 
+# Combine both graphs
 grid.arrange(
-virtual_math, virtual_ela,
+  virtual_math, virtual_ela,
   ncol = 1,
   heights = c(1, 1)
 )
-
 ```
 
 @fig-virtual illustrates a significant decline in pass rates in overall pass rates in Math and ELA for all shares of virtual learning. From Spring 2019 to Spring 2021, students have decreased pass rates in both subjects. Similarly to the in-person learning model, the fall in pass rates relative to the share of virtual learning is much more pronounced in Math than in ELA, which has a change rate of -22.4% compared to the -10.3%, respectively.

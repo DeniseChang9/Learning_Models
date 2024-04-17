@@ -36,4 +36,3 @@ num_data <-
 
 all(num_data <= 1)
 all(num_data >= 0)
-

@@ -18,12 +18,14 @@ district_data <- read_parquet("inputs/data/raw_data/raw_district_data.parquet")
 # choose the relevant columns
 clean_school_data <-
   school_data |>
-  select(leaid, subject, year,
-         pass3, pass4, pass5, pass6, pass6, pass7, pass8, 
-         share_inperson, share_virtual, share_hybrid)
+  select(
+    leaid, subject, year,
+    pass3, pass4, pass5, pass6, pass6, pass7, pass8,
+    share_inperson, share_virtual, share_hybrid
+  )
 
 # make both values the same data type
-district_data <- 
+district_data <-
   district_data |>
   mutate(leaid = as.numeric(leaid))
 
@@ -36,7 +38,7 @@ clean_district_data <-
   district_data |>
   select(leaid, state_mailing)
 
-cleaner_school_data <- 
+cleaner_school_data <-
   clean_school_data |>
   left_join(clean_district_data, by = "leaid")
 
