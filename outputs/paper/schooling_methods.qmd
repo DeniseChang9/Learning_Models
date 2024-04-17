@@ -188,6 +188,7 @@ ela_data <-
 
 ```
 
+This paper uses the data described in Section 2 to examine changes in district-level pass rate data from 11 state standardized tests taken in the spring of 2017, 2018, 2019 and 2021. Found below, @fig-in-person, @fig-virtual and @fig-hybrid provide information on the change in pass rates in Math and ELA standardized tests from the previous year, respectively, taking into account the share of different learning models done by school districts. Each year of interest is indicated buy its respective color for comparison purposes.
 
 ## In-person learning model on pass rates
 ```{r}
@@ -287,6 +288,9 @@ grid.arrange(
 
 ```
 
+@fig-in-person shows an obvious decline in pass rates from the 2018-2019 to the 2020-2021 school year for all shares of in-person learning. There is a clear fall in the pass rates overall in both subject areas in Spring 2021 from 2019. This fall is much more pronounced in Math than ELA, which has a change rate of -11.9% compared to the -6.6%, respectively.
+
+Additionally, there is evidence indicating that a greater portion of in-person learning positively impacts students' academic progress. The observed positive relationship between the proportion of in-person instruction and the average improvement in pass rates for both Math and ELA during Spring 2021 implies that a higher percentage of in-person instruction likely leads to a greater increase in pass rates. However, there was no significant change or correlation between in-person learning and pass rate fluctuations for either subject during Spring 2019 and Spring 2018. This lack of correlation could be attributed to school districts with lower rates of in-person instruction being more adept at this mode of learning prior to the pandemic, which will be discussed in Section 5
 
 ## Virtual learning model on pass rates
 ```{r}
@@ -386,106 +390,9 @@ virtual_math, virtual_ela,
 
 ```
 
+@fig-virtual illustrates a significant decline in pass rates in overall pass rates in Math and ELA for all shares of virtual learning. From Spring 2019 to Spring 2021, students have a decreased pass rates in both subjects. Similarly to the in-person learning model, the fall in pass rates relative to the share of virtual learning is much more pronounced in Math than ELA, which has a change rate of -22.4% compared to the -10.3%, respectively.
 
-## Hybrid learning model on pass rates
-
-```{r}
-#| label: fig-hybrid
-#| echo: false
-#| message: false
-#| fig-cap: "Average change in pass rates in standardised tests by the percent of hybrid learning"
-
-# Prepare data for virtual learning model in MATH
-sorted_math_hybrid <- 
-  math_data |>
-  mutate(hybrid_group = cut(share_hybrid,
-                              breaks = c(0, 25, 50, 75, 100),
-                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
-                              include.lowest = TRUE))
-average_pass_rates <- 
-  sorted_math_hybrid |>
-  group_by(year, hybrid_group) |>
-  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
-
-# Shape to wide format
-df_wide <- average_pass_rates |> 
-  spread(key = year, value = average_pass_rate)
-
-# Calculate the changes for specified year pairs
-df_wide <- 
-  df_wide |>
-  mutate(`change_2016-2017` = `2017` - `2016`,
-         `change_2017-2018` = `2018` - `2017`,
-         `change_2018-2019` = `2019` - `2018`,
-         `change_2019-2021` = `2021` - `2019`)
-
-# Reshape back to long format
-long_filtered_test_data <- 
-  df_wide |>
-  pivot_longer(cols = starts_with("change_"),
-               names_to = "year",
-               values_to = "change_in_pass_rate")
-
-# Plot the resultant graph
-hybrid_math <-
-  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = hybrid_group, color = factor(year))) +
-  geom_point(size = 4) + 
-  geom_vline(xintercept = 0, color = "darkgrey") +
-  labs(x = "Change Rate in Math (%)", y = "Percent Hybrid") +
-  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
-  labs(color = "Year Category") +
-  theme_minimal()
-
-# Prepare data for in-person learning model in ELA
-sorted_ela_hybrid <- 
-  ela_data |>
-  mutate(hybrid_group = cut(share_hybrid,
-                              breaks = c(0, 25, 50, 75, 100),
-                              labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
-                              include.lowest = TRUE))
-average_pass_rates <- 
-  sorted_ela_hybrid |>
-  group_by(year, hybrid_group) |>
-  summarise(average_pass_rate = mean(pass_rate, na.rm = TRUE))
-
-# Shape to wide format
-df_wide <- average_pass_rates |> 
-  spread(key = year, value = average_pass_rate)
-
-# Calculate the changes for specified year pairs
-df_wide <- 
-  df_wide |>
-  mutate(`change_2016-2017` = `2017` - `2016`,
-         `change_2017-2018` = `2018` - `2017`,
-         `change_2018-2019` = `2019` - `2018`,
-         `change_2019-2021` = `2021` - `2019`)
-
-# Reshape back to long format
-long_filtered_test_data <- 
-  df_wide |>
-  pivot_longer(cols = starts_with("change_"),
-               names_to = "year",
-               values_to = "change_in_pass_rate")
-
-# Plot the resultant graph
-hybrid_ela <-
-  ggplot(long_filtered_test_data, aes(x = change_in_pass_rate, y = hybrid_group, color = factor(year))) +
-  geom_point(size = 4) + 
-  geom_vline(xintercept = 0, color = "darkgrey") +
-  labs(x = "Change Rate in ELA (%)", y = "Percent Hybrid") +
-  scale_color_discrete(labels = c("Spring 2017", "Spring 2018", "Spring 2019", "Spring 2021")) +
-  labs(color = "Year Category") +
-  theme_minimal()
-
-# Combine both graphs 
-grid.arrange(
-hybrid_math, hybrid_ela,
-  ncol = 1,
-  heights = c(1, 1)
-)
-
-```
-
+Moreover, there is evidence suggesting that an increase in the share of virtual learning has a negative effect on students' learning. The negative correlation between the proportion of virtual instruction and the average  pass rates for both Math and ELA in Spring 2021 implies that a higher percentage of virtual instruction likely results in a more pronounced decline in pass rates. However, there were no significant changes or correlations between virtual learning and fluctuations in pass rates for either subject during Spring 2019 and Spring 2018. 
 
 # Discussion
 mental health component of virtual learning (social kakashi, health kakashi)
@@ -497,8 +404,6 @@ difference between grades? =>younger had less difference since their curriculum 
 difference between demographic => maybe there was something to discuss about resources
 
 ## First discussion point
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
 ## Second discussion point
 
