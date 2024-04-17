@@ -1,5 +1,5 @@
 ---
-title: "Pandemic Schooling Models in Student Learning"
+title: "In-Person Learning Models as the Key to Improving Post-Pandemic Academic Outcomes"
 subtitle: "An Analysis of Standardized Assessments Scores Across 11 States"
 author: Denise Chang
 thanks: "Code and data are available at: https://github.com/DeniseChang9/Learning_Models.git"
