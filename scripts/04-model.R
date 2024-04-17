@@ -29,6 +29,7 @@ first_model <-
     seed = 302
   )
 
+# Summary of the model
 summary(first_model)
 
 #### Save model ####
