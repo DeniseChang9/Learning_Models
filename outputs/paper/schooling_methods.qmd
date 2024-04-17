@@ -23,6 +23,7 @@ library(arrow)
 library(gridExtra)
 library(cowplot)
 library(quarto)
+library(modelsummary)
 ```
 
 # Introduction
@@ -155,12 +156,27 @@ In this model, we define the variables as follows:
 -   $\epsilon$ is the fixed effects from districts, years and location. 
 
 ## Model justification
+I propose the utilization of Bayesian Generalized Linear Modeling (GLM) to investigate the impact of learning models (in-person, virtual, and hybrid) on student pass rates on state assessments. This approach allows me to analyze this relationship in a flexible way. By using Bayesian methods, we can consider uncertainties in our data and prior knowledge about how learning modes might affect exam outcomes. For example, unpredictable covariates such as individual student motivation or external factors like access to technology might influence exam performance differently across learning modes. By incorporating these factors into our analysis, we can provide more reliable insights to educators and policymakers about which learning modes work best for different students.
 
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-how to justify a model????
-results of model + summary()
 
 # Results
+## Model Interpretation
+```{r}
+#| message: false
+#| warning: false
+#| label: tbl-model
+#| tbl-cap: Model Summary of Learning Models and Student Pass Rates
+
+# read model
+model <-
+  readRDS(file = here::here("outputs/models/first_model.rds"))
+
+modelsummary(model)
+```
+
+## Learning models on pass rates
+This sub-section uses the data described in Section 2 to examine changes in district-level pass rate data from 11 state standardized tests taken in the spring of 2017, 2018, 2019 and 2021. Found below, @fig-in-person and @fig-virtual provide information on the change in pass rates in Math and ELA standardized tests from the previous year, respectively, taking into account the share of different learning models done by school districts. Each year of interest is indicated buy its respective color for comparison purposes.
+
 ```{r}
 #| include: false
 #| warning: false
@@ -188,9 +204,7 @@ ela_data <-
 
 ```
 
-This paper uses the data described in Section 2 to examine changes in district-level pass rate data from 11 state standardized tests taken in the spring of 2017, 2018, 2019 and 2021. Found below, @fig-in-person and @fig-virtual provide information on the change in pass rates in Math and ELA standardized tests from the previous year, respectively, taking into account the share of different learning models done by school districts. Each year of interest is indicated buy its respective color for comparison purposes.
-
-## In-person learning model on pass rates
+### In-person learning model on pass rates
 ```{r}
 #| label: fig-in-person
 #| echo: false
@@ -292,7 +306,7 @@ grid.arrange(
 
 Additionally, there is evidence indicating that a greater portion of in-person learning positively impacts students' academic progress. The observed positive relationship between the proportion of in-person instruction and the average improvement in pass rates for both Math and ELA during Spring 2021 implies that a higher percentage of in-person instruction likely leads to a greater increase in pass rates. However, there was no significant change or correlation between in-person learning and pass rate fluctuations for either subject during Spring 2019 and Spring 2018. This lack of correlation could be attributed to school districts with lower rates of in-person instruction being more adept at this mode of learning prior to the pandemic, which will be discussed in Section 5
 
-## Virtual learning model on pass rates
+### Virtual learning model on pass rates
 ```{r}
 #| label: fig-virtual
 #| echo: false
