@@ -5,7 +5,7 @@ author: Denise Chang
 thanks: "Code and data are available at: https://github.com/DeniseChang9/Learning_Models.git"
 date: today
 date-format: long
-abstract: "The COVID-19 pandemic transformed the educational landscape as educators move away from traditional in-person learning models towards virtual and hybrid learning models. Using data from the National Center for Education Statistics and from various district-level assessements, this paper investigates the impact of schooling modes on students' pass rate in state standardized assessments in grades 3-8 during the 2020-2021 school year. The exploration of the data across 11 states suggests that the overall student pass rates declined during the pandemic school year. The pass rates have also seen more drastic changes in schools who had a higher share of virtual. The results of this study are significant as they can be used by educational authorities and policymakers to support student-centerd models."
+abstract: "The COVID-19 pandemic transformed the educational landscape as educators move away from traditional in-person learning models towards virtual and hybrid learning models. Using data from the National Center for Education Statistics and from various district-level assessments, this paper investigates the impact of schooling modes on students' pass rate in state standardized assessments in grades 3-8 during the 2020-2021 school year. The exploration of the data across 11 states suggests that the overall student pass rates declined during the pandemic school year. The pass rates have also seen more drastic changes in schools that had a higher share of virtual. The results of this study are significant as they can be used by educational authorities and policymakers to support student-centered models."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -22,21 +22,20 @@ library(here)
 library(arrow)
 library(gridExtra)
 library(cowplot)
-library(quarto)
 library(modelsummary)
 ```
 
 # Introduction
 
-In 2020, the World's Health Organization (WHO) declared the coronavirus disease, commonly known as COVID-19, a public health emergency of international concern [@WHO]. As an airborne disease, COVID-19 was highly contagious from person to person, which made virtually all lifestyle activities a health risk during the pandemic. During this time, hosting in-person classroom activities and instructional periods were also considered a health hazard and were strongly discouraged. It attempts to support students and staff despite the uncertainty and unpredictability of the pandemic, school leaders and authorities implemented alternative learning models which offered students the opportunity to continue their studies in a safe way. The United States witnessed an increase in districts that implemented virtual and hybrid learning models while moving away from traditional in-person learning models.
+In 2020, the World Health Organization (WHO) declared the coronavirus disease, commonly known as COVID-19, a public health emergency of international concern [@WHO]. As an airborne disease, COVID-19 was highly contagious from person to person, which made virtually all lifestyle activities a health risk during the pandemic. During this time, hosting in-person classroom activities and instructional periods were also considered a health hazard and were strongly discouraged. In an attempt to support students and staff despite the uncertainty and unpredictability of the pandemic, school leaders and authorities implemented alternative learning models that offered students the opportunity to continue their studies safely. The United States witnessed an increase in districts that implemented virtual and hybrid learning models while moving away from traditional in-person learning models.
 
-In this paper, I am interested in the impact of different schooling methods on US students' pass rates on state standardized exams in the pandemic school year in 2020-2021. Using district-level databases from 11 states and well as data from the National Center of Educational Statistics (NCES), I explore the changes in students' pass rates in 2020-2021 for more insights on the influence of the district's chosen learning model on the overall learning outcomes I find that, despite having the same curriculum, the decline in student pass rate is notably more obvious for schools who had a higher share in virtual schooling modes. More specifically, the virtual learning model resulted in an overall decline of 16.4% during the pandemic year, while the in-person model resulted in an overall decline of 9.3% between Spring 2021 and Spring 2019. Also, I also find that Math state assessments witnessed a more drastic fall in pass rates than ELA state assessments.
+In this paper, I am interested in the impact of different schooling methods on US students' pass rates on state standardized exams in the pandemic school year 2020-2021. Using district-level databases from 11 states and well as data from the National Center of Educational Statistics (NCES), I explore the changes in students' pass rates in 2020-2021 for more insights on the influence of the district's chosen learning model on the overall learning outcomes I find that, despite having the same curriculum, the decline in student pass rate is notably more obvious for schools who had a higher share in virtual schooling modes. More specifically, the virtual learning model resulted in an overall decline of 16.4% during the pandemic year, while the in-person model resulted in an overall decline of 9.3% between Spring 2021 and Spring 2019. Also, I find that Math state assessments witnessed a more drastic fall in pass rates than ELA state assessments.
 
-The remainder of this paper is structured as follows. Section 2 discusses the data collection and the studied variables. Section 3 builds a model that suggests a relationship between learning models and student pass rates. Section 4 presents results and findings of the exploration for the dataset with the help of visualized data. Section 5 explores further insights from section 4 and discusses a few weaknesses and limitations of this study. This section also suggests potential next steps following this paper.
+The remainder of this paper is structured as follows. Section 2 discusses the data collection and the studied variables. Section 3 builds a model that suggests a relationship between learning models and student pass rates. Section 4 presents the results and findings of the exploration of the dataset with the help of visualized data. Section 5 explores further insights from section 4 and discusses a few weaknesses and limitations of this study. This section also suggests potential next steps following this paper.
 
 # Data
 
-The data was cleaned and processed using the statistical programming language R [@R]. Statistical libraries such as `tidyverse` [@tidyverse], `knitr` [@knitr], `arrow` [@arrow] and `here` [@here] are leveraged in the data processing as well.
+The data was cleaned and processed using the statistical programming language R [@R]. Statistical libraries such as `tidyverse` [@tidyverse], `knitr` [@knitr], `arrow` [@arrow] and `here` [@here] are leveraged in the data processing as well. Libraries such as `gridExtra` [@gridExtra] and `cowplot` [@cowplot] were greatly useful in data visualization, while libraries such as `modelsummary` [@modelsummary] and `rstanarm` [@rstanarm] were useful in building and interpreting the model in Section 3. 
 
 ```{r}
 #| message: false
@@ -48,11 +47,11 @@ all_data <- read_parquet(here::here("outputs/data/analysis_data.parquet"))
 
 ## Source and Data Collection
 
-The paper and raw data used for replication is obtained from "Pandemic Schooling Modes and Student Test Scores: Evidence from US School Districts" [@OG], published in the American Economic Association's *American Economic Review: Insights* [@AEA]. The downloaded data is built from district-level schooling mode data from the 2020-2021 schooling year and from district-level standardized assessment data from Spring 2019-2019 and 2021. I also downloaded additional district-level demographic data for this investigation. Detailed explanation of each data source and data collection method is given below.
+The paper and raw data used for replication are obtained from "Pandemic Schooling Modes and Student Test Scores: Evidence from US School Districts" [@OG], published in the American Economic Association's *American Economic Review: Insights* [@AEA]. The downloaded data is built from district-level schooling mode data from the 2020-2021 schooling year and district-level standardized assessment data from Spring 2019-2019 and 2021. I also downloaded additional district-level demographic data for this investigation. A detailed explanation of each data source and data collection method is given below.
 
 ### District-Level Schooling Methods
 
-Data on district-level schooling methods are downloaded from the COVID-19 School Data Hub [@datahub]. This is a public database which aggregates state-sourced data to provide information on schooling modes and learning models by school districts during the 2020-2021 school year. Typically, the state-sourced data are State Education Agencies (SEA).
+Data on district-level schooling methods are downloaded from the COVID-19 School Data Hub [@datahub]. This is a public database that aggregates state-sourced data to provide information on schooling modes and learning models by school districts during the 2020-2021 school year. Typically, the state-sourced data are from State Education Agencies (SEA).
 
 ```{r}
 #| message: false
@@ -75,11 +74,11 @@ mode_data <-
 mode_data
 ```
 
-For each district in the United States, @tbl-schooling_data provides information on the percentage of the academic spent in each of type of schooling methods. To collect this data, the COVID-19 School Data Hub Team submitted data requests to state education agencies. They requested records of learning models used by schools and/or districts in the 2020-2021 academic school year. The renewal frequency of the data depends on on each school and districts where some would send new records weekly, while others would send the records in monthly. States who provided data monthly, bi-weekly or weekly during 2020-2021 year were included in this analysis.
+For each district in the United States, @tbl-schooling_data provides information on the percentage of academics spent in each type of schooling method. To collect this data, the COVID-19 School Data Hub Team submitted data requests to state education agencies. They requested records of learning models used by schools and/or districts in the 2020-2021 academic school year. The renewal frequency of the data depends on each school and district where some would send new records weekly, while others would send the records monthly. States that provided data monthly, bi-weekly, or weekly during the 2020-2021 year were included in this analysis.
 
 ### District-Level Assessment Data
 
-Data on district-level assessment results are collected from the Departments of Educations for the studied states. The respective departments collect data via surveys from constituent schools, school authorities and school boards [@USeducation]. To evaluate changes in students' pass rates in math and ELA, data on test scores between Spring 2016-2019 and 2021 were extracted. @tbl-rates_data is a sample of this data and is organized by year of study between grade 3 and grade 8.
+Data on district-level assessment results are collected from the Departments of Education for the studied states. The respective departments collect data via surveys from constituent schools, school authorities, and school boards [@USeducation]. To evaluate changes in students' pass rates in math and ELA, data on test scores between Spring 2016-2019 and 2021 were extracted. @tbl-rates_data is a sample of this data and is organized by year of study between grade 3 and grade 8.
 
 ```{r}
 #| message: false
@@ -105,27 +104,27 @@ rate_data <-
 rate_data
 ```
 
-The downloaded dataset includes states which had at least two years of pre-pandemic test data available and had no significant changes to the assessment content. Certain states such as Alaska, Nevada and New York were were excluded from the analysis as these states presented low assessment participation rate in 2021. Based on the state selection criteria previously discussed, the final analysis data captures 11 majors states in the United States: Colorado (CO), Connecticut (CT), Massachusetts (MA), Minnesota (MN), Mississippi (MS), Ohio (OH), Rhode Island (RI), Virginia (VA), West Virginia (WV), Wisconsin (WI) and Wyoming (WY).
+The downloaded dataset includes states that had at least two years of pre-pandemic test data available and had no significant changes to the assessment content. Certain states such as Alaska, Nevada, and New York were excluded from the analysis as these states presented low assessment participation rates in 2021. Based on the state selection criteria previously discussed, the final analysis data captures 11 major states in the United States: Colorado (CO), Connecticut (CT), Massachusetts (MA), Minnesota (MN), Mississippi (MS), Ohio (OH), Rhode Island (RI), Virginia (VA), West Virginia (WV), Wisconsin (WI) and Wyoming (WY).
 
 ## Variables of Interest
 
 ### Schooling Modes
 
-The possible schooling modes are in-person, virtual and hybrid learning models. In the analysis data, the schooling modes are defined and determined as follows:
+The possible schooling modes are in-person, virtual, and hybrid learning models. In the analysis data, the schooling modes are defined and determined as follows:
 
 -   In-person: All or most students have access to traditional in-person instruction five days a week.
 
--   Virtual: All or most students receive instruction online five days a week. Online instruction includes synchronous, asynchronous or a combination of synchronous and asynchronous activities.
+-   Virtual: All or most students receive instruction online five days a week. Online instruction includes synchronous, asynchronous, or a combination of synchronous and asynchronous activities.
 
 -   Hybrid: Schooling modes that do not correspond to any of the previous two models. Usually, this is a combination of the previous two.
 
 ### Pass rates
 
-Pass rates are calculated by dividing the number of students who passes standardized assessment by the number of students who took the exam in the district. For the purpose of this analysis, the pass rates for math and ELA assessments were considered. To count a pass, the student must score proficient of above on the selected state assessments.
+Pass rates are calculated by dividing the number of students who pass standardized assessments by the number of students who took the exam in the district. For this analysis, the pass rates for math and ELA assessments were considered. To count a pass, the student must score proficient or above on the selected state assessments.
 
 # Model
 
-Through the exploration and the analysis of the data, I discover there is a correlation between learning model shares and students' pass rates on state assessments. To infer the efficiency of each learning models, we construct a Bayesian generalized linear model.
+Through the exploration and the analysis of the data, I discovered there is a correlation between learning model shares and students' pass rates on state assessments. To infer the efficiency of each learning model, we construct a Bayesian generalized linear model.
 
 ## Model set-up
 
@@ -164,6 +163,7 @@ I propose the utilization of Bayesian Generalized Linear Modeling (GLM) to inves
 ```{r}
 #| message: false
 #| warning: false
+#| echo: false
 #| label: tbl-model
 #| tbl-cap: Model Summary of Learning Models and Student Pass Rates
 
@@ -174,8 +174,10 @@ model <-
 modelsummary(model)
 ```
 
+@tbl-model displays the results of the model summary. The intercept and coefficients in the model offer valuable insights into how the shares of different schooling modes impact students' pass rates. The intercept, around -1.073, represents the estimated pass rate when all shares are zero, serving as a baseline expectation. The coefficients associated with the shares illustrate the expected change in pass rates for a one-unit increase in each respective share while keeping other factors constant. Specifically, a one-unit increase in share_inperson corresponds to an estimated pass rate increase of approximately 1.722 units, while similar increases in share_virtual and share_hybrid correspond to estimated pass rate increases of approximately 1.536 and 1.678 units, respectively. These coefficients shed light on the differential impacts of various learning modalities on pass rates, offering valuable insights for educational policy and practice.
+
 ## Learning models on pass rates
-This sub-section uses the data described in Section 2 to examine changes in district-level pass rate data from 11 state standardized tests taken in the spring of 2017, 2018, 2019 and 2021. Found below, @fig-in-person and @fig-virtual provide information on the change in pass rates in Math and ELA standardized tests from the previous year, respectively, taking into account the share of different learning models done by school districts. Each year of interest is indicated buy its respective color for comparison purposes.
+This sub-section uses the data described in Section 2 to examine changes in district-level pass rate data from 11 state standardized tests taken in the spring of 2017, 2018, 2019, and 2021. Found below, @fig-in-person and @fig-virtual provide information on the change in pass rates in Math and ELA standardized tests from the previous year, respectively, taking into account the share of different learning models done by school districts. Each year of interest is indicated by its respective color for comparison purposes.
 
 ```{r}
 #| include: false
@@ -304,7 +306,7 @@ grid.arrange(
 
 @fig-in-person shows an obvious decline in pass rates from the 2018-2019 to the 2020-2021 school year for all shares of in-person learning. There is a clear fall in the pass rates overall in both subject areas in Spring 2021 from 2019. This fall is much more pronounced in Math than ELA, which has a change rate of -11.9% compared to the -6.6%, respectively.
 
-Additionally, there is evidence indicating that a greater portion of in-person learning positively impacts students' academic progress. The observed positive relationship between the proportion of in-person instruction and the average improvement in pass rates for both Math and ELA during Spring 2021 implies that a higher percentage of in-person instruction likely leads to a greater increase in pass rates. However, there was no significant change or correlation between in-person learning and pass rate fluctuations for either subject during Spring 2019 and Spring 2018. This lack of correlation could be attributed to school districts with lower rates of in-person instruction being more adept at this mode of learning prior to the pandemic, which will be discussed in Section 5
+Additionally, there is evidence indicating that a greater portion of in-person learning positively impacts students' academic progress. The observed positive relationship between the proportion of in-person instruction and the average improvement in pass rates for both Math and ELA during Spring 2021 implies that a higher percentage of in-person instruction likely leads to a greater increase in pass rates. However, there was no significant change or correlation between in-person learning and pass rate fluctuations for either subject during Spring 2019 and Spring 2018. This lack of correlation could be attributed to school districts with lower rates of in-person instruction being more adept at this mode of learning before the pandemic, which will be discussed in Section 5
 
 ### Virtual learning model on pass rates
 ```{r}
@@ -404,9 +406,9 @@ virtual_math, virtual_ela,
 
 ```
 
-@fig-virtual illustrates a significant decline in pass rates in overall pass rates in Math and ELA for all shares of virtual learning. From Spring 2019 to Spring 2021, students have a decreased pass rates in both subjects. Similarly to the in-person learning model, the fall in pass rates relative to the share of virtual learning is much more pronounced in Math than ELA, which has a change rate of -22.4% compared to the -10.3%, respectively.
+@fig-virtual illustrates a significant decline in pass rates in overall pass rates in Math and ELA for all shares of virtual learning. From Spring 2019 to Spring 2021, students have decreased pass rates in both subjects. Similarly to the in-person learning model, the fall in pass rates relative to the share of virtual learning is much more pronounced in Math than in ELA, which has a change rate of -22.4% compared to the -10.3%, respectively.
 
-Moreover, there is evidence suggesting that an increase in the share of virtual learning has a negative effect on students' learning. The negative correlation between the proportion of virtual instruction and the average  pass rates for both Math and ELA in Spring 2021 implies that a higher percentage of virtual instruction likely results in a more pronounced decline in pass rates. However, there were no significant changes or correlations between virtual learning and fluctuations in pass rates for either subject during Spring 2019, Spring 2018 and Spring 2017. 
+Moreover, there is evidence suggesting that an increase in the share of virtual learning has a negative effect on students' learning. The negative correlation between the proportion of virtual instruction and the average pass rates for both Math and ELA in Spring 2021 implies that a higher percentage of virtual instruction likely results in a more pronounced decline in pass rates. However, there were no significant changes or correlations between virtual learning and fluctuations in pass rates for either subject during Spring 2019, Spring 2018, and Spring 2017. 
 
 # Discussion
 
@@ -418,35 +420,35 @@ In-person learning is the traditional form of schooling, while virtual learning 
 
 ### In-Person Learning
 
-One key benefit of in-person learning is the opportunity for direct interaction with peers and instructors. In an in-person setting, students can engage in discussions, ask questions in real-time, and collaborate on projects face-to-face. This fosters a sense of community and encourages interpersonal skills development, such as communication, teamwork, and empathy. Also, in-person learning provides immediate access to resources and facilities, such as libraries and laboratories, which enrich the learning environment [@virtualsocial]. These interpersonal connections and physical resources play a vital role in enhancing overall academic success.
+One key benefit of in-person learning is the opportunity for direct interaction with peers and instructors. In an in-person setting, students can engage in discussions, ask questions in real time, and collaborate on projects face-to-face. This fosters a sense of community and encourages interpersonal skills development, such as communication, teamwork, and empathy. Also, in-person learning provides immediate access to resources and facilities, such as libraries and laboratories, which enrich the learning environment [@virtualsocial]. These interpersonal connections and physical resources play a vital role in enhancing overall academic success.
 
 However, in-person learning also presents challenges that can impact students' learning. One challenge is the lack of flexibility in scheduling and location. Traditional classes follow fixed timetables and require physical attendance, which can be restrictive for students with other commitments. Additionally, commuting to campus can be time-consuming and costly, especially for students who live far from educational institutions. This can lead to increased stress, fatigue, and decreased engagement in classrooms [@inpersonstress]. These barriers to access and participation can exacerbate inequalities in education and hinder student learning.
 
 ### Virtual Learning
-One of the biggest advantage of virtual learning relative to other learning methods is that it can be done remotely. This characteristics offer flexible learning pace and makes education more accessible. Online classes allow students to tailor their school hours around personal and professional commitments [@virtualflexible]. Student can rewatch recorded lectures, participate in online class forums and complete online learning activities at their own pace. Also, virtual learning allows more accessible education. Since students don't need to be physically present in a classroom, this bridges distances digitally, making it accessible for under-represented groups such as woman and people of colour [@virtualaccessible].
+One of the biggest advantages of virtual learning relative to other learning methods is that it can be done remotely. This characteristic offers a flexible learning pace and makes education more accessible. Online classes allow students to tailor their school hours around personal and professional commitments [@virtualflexible]. Student can rewatch recorded lectures, participate in online class forums, and complete online learning activities at their own pace. Also, virtual learning allows more accessible education. Since students don't need to be physically present in a classroom, this bridges distances digitally, making it accessible for under-represented groups such as women and people of color [@virtualaccessible].
 
-However, virtual learning also comes with its fair share challenges. Online classes implies technological requirements and decreased interactions with peers and professors. Not all students have access to reliable internet connections or sufficient technological equipment, which can hinder their ability to fully engage in online classes [@virtualtech]. Technological requirements would act as a barrier to learning, making it less accessible to students. Additionally, virtual learning often leads to decreased interactions with peers and professors. Without face-to-face dynamics, students may miss out on opportunities for collaboration, discussion, and direct feedback. This lack of interpersonal connection can potentially impact motivation, social development, and the overall quality of the learning experience [@virtualsocial].
+However, virtual learning also comes with its fair share of challenges. Online classes imply technological requirements and decreased interactions with peers and professors. Not all students have access to reliable internet connections or sufficient technological equipment, which can hinder their ability to fully engage in online classes [@virtualtech]. Technological requirements would act as a barrier to learning, making it less accessible to students. Additionally, virtual learning often leads to decreased interactions with peers and professors. Without face-to-face dynamics, students may miss out on opportunities for collaboration, discussion, and direct feedback. This lack of interpersonal connection can potentially impact motivation, social development, and the overall quality of the learning experience [@virtualsocial].
 
 ## Fall in Pass Rates in Spring 2021
-The change in pass rates of students in Spring 2021 from 2019 in @fig-in-person and @fig-virtual stood out from the rest of the data. Being the only assessment that shower correlation with learning model fluctuations, I explore external pandemic-related factors that explains the peculiarity of this outcome. 
+The change in pass rates of students in Spring 2021 from 2019 in @fig-in-person and @fig-virtual stood out from the rest of the data. Being the only assessment that shows a correlation with learning model fluctuations, I explore external pandemic-related factors that explain the peculiarity of this outcome. 
 
 ### Transition to Virtual Model 
 
-The COVID-19 pandemic brought about an sudden and unprecedented shift in the education landscape. With the rapid spread of the virus, schools worldwide were encouraged to quickly transition from traditional in-person instruction to remote learning formats for safety purposes. The abruptness of pandemic left no time for students and educators to properly prepare and adapt for new remote learning setting in the 2020-2021 school year. Curriculum and learning materials had to be moved online promptly while educators and students had to become sufficiently adept in navigating an online space [@educatortransition]. This rushed and clumsy shift to a virtual model disrupted the established rhythms of learning and existing support systems that promoted healthy student learning. Consequently, the efficacy of teaching and learning was compromised, leading to significant challenges in maintaining engagement, comprehension, and overall academic performance [@studenttransition].
+The COVID-19 pandemic brought about a sudden and unprecedented shift in the education landscape. With the rapid spread of the virus, schools worldwide were encouraged to quickly transition from traditional in-person instruction to remote learning formats for safety purposes. The abruptness of the pandemic left no time for students and educators to properly prepare and adapt to new remote learning settings in the 2020-2021 school year. Curriculum and learning materials had to be moved online promptly while educators and students had to become sufficiently adept in navigating an online space [@educatortransition]. This rushed and clumsy shift to a virtual model disrupted the established rhythms of learning and existing support systems that promoted healthy student learning. Consequently, the efficacy of teaching and learning was compromised, leading to significant challenges in maintaining engagement, comprehension, and overall academic performance [@studenttransition].
 
 ## Student Mental Health During the Pandemic
 
-Another variable that influenced student learning between Spring 2019 and Spring 2021 is the worsening mental health related to the global pandemic. The social isolation brought about by prolonged lockdowns coupled with the anxiety related to health concerns contributed to increased levels of stress and depression among students. This decline in mental well-being makes it challenging for students to maintain motivation for academic success. Having a lot going on in a unpredictable situation makes it difficult to prioritize academic performance. This lack of motivation directly impacts their capacity to keep up with academic demands, leading to lower grades and diminished academic performance.
+Another variable that influenced student learning between Spring 2019 and Spring 2021 is the worsening mental health related to the global pandemic. The social isolation brought about by prolonged lockdowns coupled with the anxiety related to health concerns contributed to increased levels of stress and depression among students. This decline in mental well-being makes it challenging for students to maintain motivation for academic success. Having a lot going on in an unpredictable situation makes it difficult to prioritize academic performance. This lack of motivation directly impacts their capacity to keep up with academic demands, leading to lower grades and diminished academic performance.
 
 Furthermore, the stress associated with falling behind can create a vicious cycle, which further worsens mental health and decreases motivation. This complex relationship between mental health and academic success highlights the need for support systems within educational institutions to address mental health challenges and to support students during their academic experience.
 
 ### Weaknesses
-A weakness in this analysis is the unreliable dataset downloaded from the replication package. One of the tests in the script `03-test_data.R` checks that the shares of in-person, virtual and hybrid learning models sums up to 100% with a margin to take in consideration rounding errors during the cleaning of the data. However, there are districts in the dataset that fails this test. In the extreme case, there are districts whose shares sum up to 80% meaning there is 20% of the data for these district that are missing. 
+A weakness in this analysis is the unreliable dataset downloaded from the replication package. One of the tests in the script `03-test_data.R` checks that the shares of in-person, virtual, and hybrid learning models sum up to 100% with a margin to take into consideration rounding errors during the cleaning of the data. However, there are districts in the dataset that fail this test. In the extreme case, there are districts whose shares sum up to 80% meaning there is 20% of the data for these district that are missing. 
 
-Another weakness of this analysis is the definition of the in-person learning model. In Section 2, a learning model is defined to be in-person if all or most students have access to traditional in-person instruction five days a week. This definition is not rigorous as it can easily overlap with the hybrid and virtual learning models. Having **access** to in-person instruction, does not necessarily mean students were in-person during the learning period. Given the pandemic, students could have opted for virtual learning, yet since still have access to in-person facilities. This would bias the dataset since these students would be considered part of the in-person learning model, while having done most or part of their learning in a remote setting.  
+Another weakness of this analysis is the definition of the in-person learning model. In Section 2, a learning model is defined to be in-person if all or most students have access to traditional in-person instruction five days a week. This definition is not rigorous as it can easily overlap with the hybrid and virtual learning models. Having **access** to in-person instruction does not necessarily mean students were in-person during the learning period. Given the pandemic, students could have opted for virtual learning, yet still have access to in-person facilities. This would bias the dataset since these students would be considered part of the in-person learning model while having done most or part of their learning in a remote setting.  
 
 ## Next steps
-Exploring the effectiveness of learning models earning extends beyond state standardized assessment pass rates. Future studies should consider different assessment methods to capture a comprehensive view of student learning. For example, peer and self-assessments could provide insights into collaborative skills and self-perceived progress, offering a better understanding of students' social development. 
+Exploring the effectiveness of learning models earning extends beyond state-standardized assessment pass rates. Future studies should consider different assessment methods to capture a comprehensive view of student learning. For example, peer and self-assessments could provide insights into collaborative skills and self-perceived progress, offering a better understanding of students' social development. 
 
 Outside the scope of research, policymakers and educational authorities should consider focusing on improving in-person learning models to enhance student learning. As suggested by this study, the advantages of face-to-face interactions, such as immediate feedback, and stronger relational dynamics between teachers and students, translate into more effective learning environments. In-person settings also facilitate the development of critical soft skills, such as teamwork and social engagement, which are less easily cultivated through online formats. By focusing on in-person models, educational leaders can ensure a student-centered organization of educational institutions. 
 
